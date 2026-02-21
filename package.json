@@ -9,14 +9,24 @@
     "lint": "eslint .",
     "format": "prettier --write \"src/**/*.{ts,tsx,css,json}\"",
     "format:check": "prettier --check \"src/**/*.{ts,tsx,css,json}\"",
-    "preview": "vite preview"
+    "preview": "vite preview",
+    "storybook": "storybook dev -p 6006",
+    "build-storybook": "storybook build"
   },
   "dependencies": {
+    "clsx": "^2.1.1",
+    "lucide-react": "^0.575.0",
     "react": "^19.2.0",
-    "react-dom": "^19.2.0"
+    "react-dom": "^19.2.0",
+    "tailwind-merge": "^3.5.0"
   },
   "devDependencies": {
+    "@chromatic-com/storybook": "^5.0.1",
     "@eslint/js": "^10.0.1",
+    "@storybook/addon-a11y": "^10.2.10",
+    "@storybook/addon-docs": "^10.2.10",
+    "@storybook/addon-onboarding": "^10.2.10",
+    "@storybook/react-vite": "^10.2.10",
     "@tailwindcss/vite": "^4.2.0",
     "@types/react": "^19.2.7",
     "@types/react-dom": "^19.2.3",
@@ -24,8 +34,10 @@
     "eslint": "^10.0.1",
     "eslint-plugin-react-hooks": "^7.0.1",
     "eslint-plugin-react-refresh": "^0.4.24",
+    "eslint-plugin-storybook": "^10.2.10",
     "globals": "^16.5.0",
     "prettier": "^3.8.1",
+    "storybook": "^10.2.10",
     "tailwindcss": "^4.2.0",
     "typescript": "~5.9.3",
     "typescript-eslint": "^8.56.0",
