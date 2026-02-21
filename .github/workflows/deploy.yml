@@ -1,0 +1,205 @@
+name: Deploy
+
+on:
+  workflow_run:
+    workflows: ["CI Pipeline"]
+    types: [completed]
+    branches: [main, develop, 'release/*']
+
+  workflow_dispatch:
+    inputs:
+      environment:
+        description: 'Deployment environment'
+        required: true
+        type: choice
+        options:
+          - staging
+          - production
+      version:
+        description: 'Version to deploy (leave empty for latest)'
+        required: false
+
+concurrency:
+  group: deploy-${{ github.event.inputs.environment || 'staging' }}
+  cancel-in-progress: false
+
+jobs:
+  prepare:
+    name: Prepare Deployment
+    runs-on: ubuntu-latest
+    if: ${{ github.event.workflow_run.conclusion == 'success' || github.event_name == 'workflow_dispatch' }}
+    outputs:
+      environment: ${{ steps.set-env.outputs.environment }}
+      version: ${{ steps.set-version.outputs.version }}
+    steps:
+      - name: Determine environment
+        id: set-env
+        run: |
+          if [ "${{ github.event_name }}" == "workflow_dispatch" ]; then
+            echo "environment=${{ github.event.inputs.environment }}" >> $GITHUB_OUTPUT
+          elif [ "${{ github.ref }}" == "refs/heads/main" ]; then
+            echo "environment=production" >> $GITHUB_OUTPUT
+          else
+            echo "environment=staging" >> $GITHUB_OUTPUT
+          fi
+
+      - name: Determine version
+        id: set-version
+        run: |
+          if [ -n "${{ github.event.inputs.version }}" ]; then
+            echo "version=${{ github.event.inputs.version }}" >> $GITHUB_OUTPUT
+          else
+            echo "version=${{ github.event.workflow_run.head_sha || github.sha }}" >> $GITHUB_OUTPUT
+          fi
+
+  deploy-staging:
+    name: Deploy to Staging
+    runs-on: ubuntu-latest
+    needs: prepare
+    if: needs.prepare.outputs.environment == 'staging'
+    environment:
+      name: staging
+      url: https://staging.example.com
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Download build artifacts
+        uses: actions/download-artifact@v4
+        with:
+          name: build-${{ needs.prepare.outputs.version }}
+          path: dist/
+
+      - name: Azure Login
+        uses: azure/login@v2
+        with:
+          client-id: ${{ secrets.AZURE_CLIENT_ID }}
+          tenant-id: ${{ secrets.AZURE_TENANT_ID }}
+          subscription-id: ${{ secrets.AZURE_SUBSCRIPTION_ID }}
+
+      - name: Deploy to Azure Blob Storage
+        uses: azure/cli@v2
+        with:
+          inlineScript: |
+            az storage blob upload-batch \
+              --account-name ${{ vars.AZURE_STORAGE_ACCOUNT_STAGING }} \
+              --destination '$web' \
+              --source dist/ \
+              --overwrite \
+              --content-cache-control "public, max-age=31536000, immutable" \
+              --pattern "*" \
+              --exclude-pattern "index.html;*.json"
+
+            az storage blob upload \
+              --account-name ${{ vars.AZURE_STORAGE_ACCOUNT_STAGING }} \
+              --container-name '$web' \
+              --file dist/index.html \
+              --name index.html \
+              --content-cache-control "no-cache, no-store, must-revalidate" \
+              --overwrite
+
+      - name: Purge Azure CDN
+        uses: azure/cli@v2
+        with:
+          inlineScript: |
+            az cdn endpoint purge \
+              --resource-group ${{ vars.AZURE_RESOURCE_GROUP }} \
+              --profile-name ${{ vars.AZURE_CDN_PROFILE_STAGING }} \
+              --name ${{ vars.AZURE_CDN_ENDPOINT_STAGING }} \
+              --content-paths "/*"
+
+      - name: Run smoke tests
+        run: |
+          sleep 30
+          curl -f https://staging.example.com/health || exit 1
+
+      - name: Notify deployment
+        uses: slackapi/slack-github-action@v1
+        with:
+          payload: |
+            {
+              "text": "Deployed to staging: ${{ needs.prepare.outputs.version }}"
+            }
+        env:
+          SLACK_WEBHOOK_URL: ${{ secrets.SLACK_WEBHOOK }}
+
+  deploy-production:
+    name: Deploy to Production
+    runs-on: ubuntu-latest
+    needs: prepare
+    if: needs.prepare.outputs.environment == 'production'
+    environment:
+      name: production
+      url: https://app.example.com
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Download build artifacts
+        uses: actions/download-artifact@v4
+        with:
+          name: build-${{ needs.prepare.outputs.version }}
+          path: dist/
+
+      - name: Azure Login
+        uses: azure/login@v2
+        with:
+          client-id: ${{ secrets.AZURE_CLIENT_ID_PROD }}
+          tenant-id: ${{ secrets.AZURE_TENANT_ID }}
+          subscription-id: ${{ secrets.AZURE_SUBSCRIPTION_ID_PROD }}
+
+      - name: Deploy to Azure Blob Storage (Blue/Green)
+        uses: azure/cli@v2
+        with:
+          inlineScript: |
+            az storage blob upload-batch \
+              --account-name ${{ vars.AZURE_STORAGE_ACCOUNT_BLUE }} \
+              --destination '$web' \
+              --source dist/ \
+              --overwrite \
+              --content-cache-control "public, max-age=31536000, immutable" \
+              --pattern "*" \
+              --exclude-pattern "index.html;*.json"
+
+            az storage blob upload \
+              --account-name ${{ vars.AZURE_STORAGE_ACCOUNT_BLUE }} \
+              --container-name '$web' \
+              --file dist/index.html \
+              --name index.html \
+              --content-cache-control "no-cache, no-store, must-revalidate" \
+              --overwrite
+
+      - name: Health check blue environment
+        run: |
+          sleep 30
+          curl -f https://blue.app.example.com/health || exit 1
+
+      - name: Purge Azure CDN
+        uses: azure/cli@v2
+        with:
+          inlineScript: |
+            az cdn endpoint purge \
+              --resource-group ${{ vars.AZURE_RESOURCE_GROUP }} \
+              --profile-name ${{ vars.AZURE_CDN_PROFILE_PROD }} \
+              --name ${{ vars.AZURE_CDN_ENDPOINT_PROD }} \
+              --content-paths "/*"
+
+      - name: Verify production
+        run: |
+          sleep 60
+          curl -f https://app.example.com/health || exit 1
+
+      - name: Create release tag
+        run: |
+          git tag -a "v$(date +%Y%m%d%H%M%S)" -m "Production release"
+          git push origin --tags
+
+      - name: Notify deployment
+        uses: slackapi/slack-github-action@v1
+        with:
+          payload: |
+            {
+              "text": "Deployed to production: ${{ needs.prepare.outputs.version }}"
+            }
+        env:
+          SLACK_WEBHOOK_URL: ${{ secrets.SLACK_WEBHOOK }}

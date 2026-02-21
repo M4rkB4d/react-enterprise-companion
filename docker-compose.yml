@@ -1,0 +1,56 @@
+# Note: The top-level `version` key is deprecated in Docker Compose V2+
+# and is no longer needed. See https://docs.docker.com/compose/releases/migrate/
+
+services:
+  app:
+    build:
+      context: .
+      dockerfile: Dockerfile
+      args:
+        - VITE_APP_ENV=${VITE_APP_ENV:-production}
+        - VITE_API_BASE_URL=${VITE_API_BASE_URL}
+        - VITE_SENTRY_DSN=${VITE_SENTRY_DSN}
+    image: enterprise-banking:${VERSION:-latest}
+    container_name: enterprise-banking-app
+    ports:
+      - "8080:8080"
+    environment:
+      - VITE_APP_ENV=${VITE_APP_ENV:-production}
+      - VITE_API_BASE_URL=${VITE_API_BASE_URL}
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:8080/health"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 40s
+    restart: unless-stopped
+    networks:
+      - app-network
+    logging:
+      driver: "json-file"
+      options:
+        max-size: "10m"
+        max-file: "3"
+
+  # Optional: Nginx reverse proxy with SSL
+  nginx-proxy:
+    image: nginx:alpine
+    container_name: nginx-proxy
+    ports:
+      - "80:80"
+      - "443:443"
+    volumes:
+      - ./nginx/proxy.conf:/etc/nginx/nginx.conf:ro
+      - ./certs:/etc/nginx/certs:ro
+    depends_on:
+      - app
+    networks:
+      - app-network
+    restart: unless-stopped
+
+networks:
+  app-network:
+    driver: bridge
+
+volumes:
+  nginx-cache:
