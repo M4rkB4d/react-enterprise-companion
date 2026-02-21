@@ -7,8 +7,13 @@ import { Spinner } from '@/components/ui/Spinner';
 // Lazy-loaded pages
 const LoginPage = lazy(() => import('@/features/auth/components/LoginPage'));
 const DashboardPage = lazy(() => import('@/pages/DashboardPage'));
-const AccountsPage = lazy(() => import('@/pages/AccountsPage'));
-const AccountDetailPage = lazy(() => import('@/pages/AccountDetailPage'));
+const PaymentsPage = lazy(() =>
+  import('@/features/payments/components/PaymentsPage').then((m) => ({
+    default: m.default,
+  })),
+);
+const PaymentWizard = lazy(() => import('@/features/payments/components/PaymentWizard'));
+const PaymentHistory = lazy(() => import('@/features/payments/components/PaymentHistory'));
 
 function LazyWrapper({ children }: { children: React.ReactNode }) {
   return (
@@ -49,21 +54,30 @@ export function AppRoutes() {
             }
           />
           <Route
-            path="accounts"
+            path="payments"
             element={
               <LazyWrapper>
-                <AccountsPage />
+                <PaymentsPage />
               </LazyWrapper>
             }
-          />
-          <Route
-            path="accounts/:accountId"
-            element={
-              <LazyWrapper>
-                <AccountDetailPage />
-              </LazyWrapper>
-            }
-          />
+          >
+            <Route
+              index
+              element={
+                <LazyWrapper>
+                  <PaymentHistory />
+                </LazyWrapper>
+              }
+            />
+            <Route
+              path="new"
+              element={
+                <LazyWrapper>
+                  <PaymentWizard />
+                </LazyWrapper>
+              }
+            />
+          </Route>
         </Route>
       </Route>
     </Routes>
