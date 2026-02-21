@@ -1,4 +1,3 @@
-import type { RequestHandler } from 'msw';
+import { accountHandlers } from '@/features/accounts/__mocks__/handlers';
 
-// Feature-specific handlers will be added as modules are built
-export const handlers: RequestHandler[] = [];
+export const handlers = [...accountHandlers];
