@@ -15,14 +15,7 @@
  * Cross-ref: Doc 05 §3 for route change detection
  */
 
-import {
-  createContext,
-  useContext,
-  useEffect,
-  useMemo,
-  useRef,
-  type ReactNode,
-} from 'react';
+import { createContext, useContext, useEffect, useMemo, useRef, type ReactNode } from 'react';
 import { useLocation } from 'react-router';
 import { v4 as uuidv4 } from 'uuid';
 
@@ -37,6 +30,7 @@ const AuditContext = createContext<AuditContextValue | null>(null);
  * Hook to get the current correlation ID.
  * Must be used inside AuditProvider.
  */
+// eslint-disable-next-line react-refresh/only-export-components -- hook export alongside provider
 export function useCorrelationId(): string {
   const ctx = useContext(AuditContext);
   if (!ctx) {
@@ -48,6 +42,7 @@ export function useCorrelationId(): string {
 /**
  * Hook to get the current session ID.
  */
+// eslint-disable-next-line react-refresh/only-export-components -- hook export alongside provider
 export function useSessionId(): string {
   const ctx = useContext(AuditContext);
   if (!ctx) {
@@ -107,14 +102,7 @@ export function AuditProvider({ children }: AuditProviderProps) {
     });
   }, [location.pathname, location.search, correlationId]);
 
-  const value = useMemo(
-    () => ({ correlationId, sessionId }),
-    [correlationId, sessionId],
-  );
+  const value = useMemo(() => ({ correlationId, sessionId }), [correlationId, sessionId]);
 
-  return (
-    <AuditContext.Provider value={value}>
-      {children}
-    </AuditContext.Provider>
-  );
+  return <AuditContext.Provider value={value}>{children}</AuditContext.Provider>;
 }

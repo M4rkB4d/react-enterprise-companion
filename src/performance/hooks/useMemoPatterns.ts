@@ -1,10 +1,4 @@
-import {
-  useMemo,
-  useCallback,
-  useRef,
-  useLayoutEffect,
-  type DependencyList,
-} from 'react';
+import { useMemo, useCallback, useRef, useLayoutEffect, type DependencyList } from 'react';
 
 /**
  * useMemo with deep comparison
@@ -13,6 +7,7 @@ export function useMemoDeep<T>(factory: () => T, deps: DependencyList): T {
   const depsRef = useRef<DependencyList>(deps);
   const valueRef = useRef<T | undefined>(undefined);
 
+  /* eslint-disable react-hooks/refs -- intentional: deep comparison memoization requires ref access during render */
   const hasChanged = !depsRef.current.every((dep, i) => {
     if (typeof dep === 'object' && dep !== null) {
       return JSON.stringify(dep) === JSON.stringify(deps[i]);
@@ -26,6 +21,7 @@ export function useMemoDeep<T>(factory: () => T, deps: DependencyList): T {
   }
 
   return valueRef.current;
+  /* eslint-enable react-hooks/refs */
 }
 
 /**
@@ -41,7 +37,7 @@ export function useStableCallback<T extends (...args: unknown[]) => unknown>(cal
   });
 
   // Return stable function that calls current callback
-  // eslint-disable-next-line react-hooks/exhaustive-deps
+  // eslint-disable-next-line react-hooks/use-memo -- type assertion wrapper is intentional for stable callback pattern
   return useCallback(((...args: unknown[]) => callbackRef.current(...args)) as T, []);
 }
 
@@ -56,6 +52,7 @@ export function useDebouncedCallback<T extends (...args: never[]) => unknown>(
   const callbackRef = useRef(callback);
   callbackRef.current = callback;
 
+  /* eslint-disable react-hooks/use-memo -- type assertion wrapper around useCallback is intentional */
   return useCallback(
     ((...args) => {
       if (timeoutRef.current) {
@@ -67,6 +64,7 @@ export function useDebouncedCallback<T extends (...args: never[]) => unknown>(
     }) as T,
     [delay],
   );
+  /* eslint-enable react-hooks/use-memo */
 }
 
 /**
@@ -80,6 +78,7 @@ export function useThrottledCallback<T extends (...args: never[]) => unknown>(
   const callbackRef = useRef(callback);
   callbackRef.current = callback;
 
+  /* eslint-disable react-hooks/use-memo -- type assertion wrapper around useCallback is intentional */
   return useCallback(
     ((...args) => {
       const now = Date.now();
@@ -90,6 +89,7 @@ export function useThrottledCallback<T extends (...args: never[]) => unknown>(
     }) as T,
     [delay],
   );
+  /* eslint-enable react-hooks/use-memo */
 }
 
 /**
@@ -102,6 +102,7 @@ export function useSelector<TState, TResult>(
 ): TResult {
   const previousResultRef = useRef<TResult | undefined>(undefined);
 
+  /* eslint-disable react-hooks/refs -- intentional: selector memoization pattern requires ref access during render */
   return useMemo(() => {
     const result = selector(state);
 
@@ -112,4 +113,5 @@ export function useSelector<TState, TResult>(
     previousResultRef.current = result;
     return result;
   }, [state, selector, equalityFn]);
+  /* eslint-enable react-hooks/refs */
 }

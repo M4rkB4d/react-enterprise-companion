@@ -16,13 +16,8 @@
  * Cross-ref: Doc 09 §7 for session management
  */
 
-import { useRef, useCallback, useEffect } from 'react';
-import {
-  deriveKey,
-  encryptData,
-  decryptData,
-  generateSalt,
-} from '@/compliance/utils/web-crypto';
+import { useRef, useState, useCallback, useEffect } from 'react';
+import { deriveKey, encryptData, decryptData, generateSalt } from '@/compliance/utils/web-crypto';
 
 const SALT_KEY = '__encrypted_storage_salt__';
 
@@ -39,11 +34,9 @@ interface UseEncryptedStorageReturn {
   readonly isReady: boolean;
 }
 
-export function useEncryptedStorage(
-  sessionToken: string,
-): UseEncryptedStorageReturn {
+export function useEncryptedStorage(sessionToken: string): UseEncryptedStorageReturn {
   const keyRef = useRef<CryptoKey | null>(null);
-  const isReady = keyRef.current !== null;
+  const [isReady, setIsReady] = useState(false);
 
   // Derive the encryption key from the session token on mount
   useEffect(() => {
@@ -59,6 +52,7 @@ export function useEncryptedStorage(
       }
 
       keyRef.current = await deriveKey(sessionToken, salt as Uint8Array<ArrayBuffer>);
+      setIsReady(true);
     }
 
     initKey();
@@ -66,35 +60,30 @@ export function useEncryptedStorage(
     // Clear key on unmount (session end)
     return () => {
       keyRef.current = null;
+      setIsReady(false);
     };
   }, [sessionToken]);
 
-  const setItem = useCallback(
-    async (key: string, value: unknown): Promise<void> => {
-      if (!keyRef.current) throw new Error('Encryption key not ready');
-      const plaintext = JSON.stringify(value);
-      const encrypted = await encryptData(keyRef.current, plaintext);
-      localStorage.setItem(`__enc__${key}`, encrypted);
-    },
-    [],
-  );
+  const setItem = useCallback(async (key: string, value: unknown): Promise<void> => {
+    if (!keyRef.current) throw new Error('Encryption key not ready');
+    const plaintext = JSON.stringify(value);
+    const encrypted = await encryptData(keyRef.current, plaintext);
+    localStorage.setItem(`__enc__${key}`, encrypted);
+  }, []);
 
-  const getItem = useCallback(
-    async <T = unknown>(key: string): Promise<T | null> => {
-      if (!keyRef.current) throw new Error('Encryption key not ready');
-      const encrypted = localStorage.getItem(`__enc__${key}`);
-      if (!encrypted) return null;
+  const getItem = useCallback(async <T = unknown>(key: string): Promise<T | null> => {
+    if (!keyRef.current) throw new Error('Encryption key not ready');
+    const encrypted = localStorage.getItem(`__enc__${key}`);
+    if (!encrypted) return null;
 
-      try {
-        const plaintext = await decryptData(keyRef.current, encrypted);
-        return JSON.parse(plaintext) as T;
-      } catch {
-        console.warn(`[EncryptedStorage] Failed to decrypt key: ${key}`);
-        return null;
-      }
-    },
-    [],
-  );
+    try {
+      const plaintext = await decryptData(keyRef.current, encrypted);
+      return JSON.parse(plaintext) as T;
+    } catch {
+      console.warn(`[EncryptedStorage] Failed to decrypt key: ${key}`);
+      return null;
+    }
+  }, []);
 
   const removeItem = useCallback((key: string): void => {
     localStorage.removeItem(`__enc__${key}`);
@@ -111,6 +100,7 @@ export function useEncryptedStorage(
     keysToRemove.forEach((k) => localStorage.removeItem(k));
     localStorage.removeItem(SALT_KEY);
     keyRef.current = null;
+    setIsReady(false);
   }, []);
 
   return { setItem, getItem, removeItem, clear, isReady };

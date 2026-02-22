@@ -77,6 +77,7 @@ export function PerformanceProvider({ children, config }: PerformanceProviderPro
 
   useEffect(() => {
     if (Math.random() < mergedConfig.monitoring.sampleRate) {
+      // eslint-disable-next-line react-hooks/set-state-in-effect -- intentional: one-time initialization on mount
       startMonitoring();
     }
 

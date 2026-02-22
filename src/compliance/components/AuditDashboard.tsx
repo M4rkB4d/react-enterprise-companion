@@ -68,11 +68,12 @@ export function AuditDashboard() {
   });
 
   /** Unique action types for the filter dropdown */
+  const events = data?.events;
   const actionTypes = useMemo(() => {
-    if (!data?.events) return [];
-    const types = new Set(data.events.map((e) => e.action));
+    if (!events) return [];
+    const types = new Set(events.map((e) => e.action));
     return Array.from(types).sort();
-  }, [data?.events]);
+  }, [events]);
 
   const totalPages = data ? Math.ceil(data.total / pageSize) : 0;
 
@@ -96,7 +97,9 @@ export function AuditDashboard() {
         >
           <option value="">All Actions</option>
           {actionTypes.map((type) => (
-            <option key={type} value={type}>{type}</option>
+            <option key={type} value={type}>
+              {type}
+            </option>
           ))}
         </select>
         <input

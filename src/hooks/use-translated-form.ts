@@ -24,9 +24,7 @@ import { createTranslatedErrorMap } from '@/i18n/translated-error-map';
  *
  * @see Doc 06 section 5 for react-hook-form integration
  */
-export function useTranslatedForm<
-  TFieldValues extends FieldValues = FieldValues,
->({
+export function useTranslatedForm<TFieldValues extends FieldValues = FieldValues>({
   schema,
   ...formOptions
 }: {
@@ -40,9 +38,9 @@ export function useTranslatedForm<
   // Create the form with the translated resolver
   // Type assertion needed: Zod 4 classic types don't align perfectly
   // with @hookform/resolvers' core type expectations
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   return useForm<TFieldValues>({
     ...formOptions,
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any -- required for Zod/react-hook-form type bridge
     resolver: zodResolver(schema as any, { error: errorMap } as any) as any,
   });
 }

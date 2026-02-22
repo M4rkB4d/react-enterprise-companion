@@ -12,6 +12,7 @@ import { useLocaleStore } from './locale-store';
  *
  * @see Doc 14 section 6 for WCAG compliance requirements
  */
+// eslint-disable-next-line react-refresh/only-export-components -- hook, not a component
 export function useLanguageAttribute() {
   const locale = useLocaleStore((s) => s.locale);
   const direction = useLocaleStore((s) => s.direction);

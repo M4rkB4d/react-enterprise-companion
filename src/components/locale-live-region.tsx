@@ -29,7 +29,7 @@ export function useLocaleAnnouncer() {
     return () => {
       document.body.removeChild(region);
     };
-  }, []);
+  }, [locale]);
 
   // Update lang when locale changes
   useEffect(() => {

@@ -34,6 +34,7 @@ export function useProgressiveRendering<T>(
 
   // Reset when items change
   useEffect(() => {
+    // eslint-disable-next-line react-hooks/set-state-in-effect -- intentional: reset count when items array changes
     setVisibleCount(batchSize);
   }, [items, batchSize]);
 

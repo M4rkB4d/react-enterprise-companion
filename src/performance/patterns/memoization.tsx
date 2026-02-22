@@ -18,6 +18,7 @@ function deepEqual(a: unknown, b: unknown): boolean {
   );
 }
 
+// eslint-disable-next-line react-refresh/only-export-components -- utility function, not a component
 export function memoDeep<P extends object>(Component: ComponentType<P>): ComponentType<P> {
   return memo(Component, (prevProps, nextProps) => deepEqual(prevProps, nextProps));
 }
@@ -25,6 +26,7 @@ export function memoDeep<P extends object>(Component: ComponentType<P>): Compone
 /**
  * Selective memo - only compare specified props
  */
+// eslint-disable-next-line react-refresh/only-export-components -- utility function, not a component
 export function memoSelect<P extends object>(
   Component: ComponentType<P>,
   propsToCompare: (keyof P)[],
@@ -37,6 +39,7 @@ export function memoSelect<P extends object>(
 /**
  * Memo with custom comparator
  */
+// eslint-disable-next-line react-refresh/only-export-components -- utility function, not a component
 export function memoWithComparator<P extends object>(
   Component: ComponentType<P>,
   comparator: (prevProps: P, nextProps: P) => boolean,

@@ -80,15 +80,14 @@ export class GlobalErrorBoundary extends Component<
         });
       }
 
-      return (
-        <DefaultErrorFallback error={error} resetErrorBoundary={this.resetErrorBoundary} />
-      );
+      return <DefaultErrorFallback error={error} resetErrorBoundary={this.resetErrorBoundary} />;
     }
 
     return children;
   }
 }
 
+// eslint-disable-next-line react-refresh/only-export-components -- co-located fallback component
 function DefaultErrorFallback({ error, resetErrorBoundary }: ErrorFallbackProps) {
   const isDevelopment = import.meta.env.DEV;
 
@@ -96,7 +95,12 @@ function DefaultErrorFallback({ error, resetErrorBoundary }: ErrorFallbackProps)
     <div className="flex min-h-screen items-center justify-center bg-gray-50 p-4">
       <div className="max-w-lg rounded-lg bg-white p-8 shadow-lg">
         <div className="flex items-center gap-3">
-          <svg className="h-8 w-8 text-red-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <svg
+            className="h-8 w-8 text-red-600"
+            fill="none"
+            stroke="currentColor"
+            viewBox="0 0 24 24"
+          >
             <path
               strokeLinecap="round"
               strokeLinejoin="round"

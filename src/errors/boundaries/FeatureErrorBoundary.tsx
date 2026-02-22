@@ -109,6 +109,7 @@ interface FeatureErrorFallbackProps {
   onRetry: () => void;
 }
 
+// eslint-disable-next-line react-refresh/only-export-components -- co-located fallback component
 function FeatureErrorFallback({
   featureName,
   error,

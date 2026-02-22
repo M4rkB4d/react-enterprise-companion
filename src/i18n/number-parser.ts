@@ -57,7 +57,7 @@ export class LocaleNumberParser {
     normalized = normalized.replace(this.decimalSep, '.');
 
     // Remove any remaining non-numeric characters except . and -
-    normalized = normalized.replace(/[^\d.\-]/g, '');
+    normalized = normalized.replace(/[^\d.-]/g, '');
 
     const result = parseFloat(normalized);
     return Number.isFinite(result) ? result : null;

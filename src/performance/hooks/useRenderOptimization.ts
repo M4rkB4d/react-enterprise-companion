@@ -15,6 +15,7 @@ const SLOW_RENDER_THRESHOLD = 16; // 16ms = 60fps
 export function useRenderTracking(componentName: string): RenderInfo {
   const renderCountRef = useRef(0);
   const renderTimesRef = useRef<number[]>([]);
+  // eslint-disable-next-line react-hooks/purity -- intentional: performance measurement requires impure timing call
   const lastRenderStartRef = useRef(performance.now());
 
   useEffect(() => {
@@ -33,11 +34,11 @@ export function useRenderTracking(componentName: string): RenderInfo {
   });
 
   // Record render start time
+  // eslint-disable-next-line react-hooks/purity -- intentional: performance measurement requires impure timing call
   lastRenderStartRef.current = performance.now();
 
   const times = renderTimesRef.current;
-  const averageRenderTime =
-    times.length > 0 ? times.reduce((a, b) => a + b, 0) / times.length : 0;
+  const averageRenderTime = times.length > 0 ? times.reduce((a, b) => a + b, 0) / times.length : 0;
   const slowRenders = times.filter((t) => t > SLOW_RENDER_THRESHOLD).length;
 
   return {

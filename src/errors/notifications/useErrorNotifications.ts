@@ -26,6 +26,7 @@ export function useErrorNotifications(): UseErrorNotificationsReturn {
     });
 
     // Load existing notifications
+    // eslint-disable-next-line react-hooks/set-state-in-effect -- synchronous initialization from external service on mount
     setNotifications(errorNotificationService.getActiveNotifications());
 
     return unsubscribe;
