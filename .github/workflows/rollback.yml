@@ -30,17 +30,13 @@ jobs:
         uses: actions/setup-node@v4
         with:
           node-version: '22.x'
-
-      - name: Setup pnpm
-        uses: pnpm/action-setup@v2
-        with:
-          version: '9'
+          cache: 'npm'
 
       - name: Install dependencies
-        run: pnpm install --frozen-lockfile
+        run: npm ci
 
       - name: Build application
-        run: pnpm build
+        run: npm run build
         env:
           VITE_APP_ENV: ${{ github.event.inputs.environment }}
 
