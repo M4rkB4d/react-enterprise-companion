@@ -1,0 +1,70 @@
+apiVersion: kustomize.config.k8s.io/v1beta1
+kind: Kustomization
+
+namespace: production
+
+resources:
+  - ../../base
+
+namePrefix: prod-
+
+labels:
+  - pairs:
+      environment: production
+    includeSelectors: false
+
+replicas:
+  - name: enterprise-banking-frontend
+    count: 5
+
+images:
+  - name: ${IMAGE_REGISTRY}/enterprise-banking
+    newTag: ${IMAGE_TAG}
+
+configMapGenerator:
+  - name: frontend-config
+    behavior: replace
+    literals:
+      - app-env=production
+      - api-base-url=https://api.example.com
+      - sentry-dsn=${SENTRY_DSN}
+
+patches:
+  - target:
+      kind: Deployment
+      name: enterprise-banking-frontend
+    patch: |-
+      - op: replace
+        path: /spec/template/spec/containers/0/resources/requests/cpu
+        value: "200m"
+      - op: replace
+        path: /spec/template/spec/containers/0/resources/requests/memory
+        value: "256Mi"
+      - op: replace
+        path: /spec/template/spec/containers/0/resources/limits/cpu
+        value: "1000m"
+      - op: replace
+        path: /spec/template/spec/containers/0/resources/limits/memory
+        value: "1Gi"
+
+  - target:
+      kind: HorizontalPodAutoscaler
+      name: enterprise-banking-hpa
+    patch: |-
+      - op: replace
+        path: /spec/minReplicas
+        value: 5
+      - op: replace
+        path: /spec/maxReplicas
+        value: 50
+
+  - target:
+      kind: Ingress
+      name: enterprise-banking-ingress
+    patch: |-
+      - op: replace
+        path: /spec/rules/0/host
+        value: app.example.com
+      - op: replace
+        path: /spec/tls/0/hosts/0
+        value: app.example.com

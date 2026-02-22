@@ -53,7 +53,6 @@ export function ConfirmTransferStep() {
 
     try {
       await createTransfer.mutateAsync(parsed.data);
-      reset();
       return { success: true, message: 'Transfer completed successfully!' };
     } catch {
       return { success: false, message: 'Transfer failed. Please try again.' };
