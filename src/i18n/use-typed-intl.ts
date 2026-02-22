@@ -26,20 +26,17 @@ export function useTypedIntl() {
       intl.formatMessage(descriptor, values),
 
     /** Format a number (delegates to Intl.NumberFormat) */
-    formatNumber: (...args: Parameters<IntlShape['formatNumber']>) =>
-      intl.formatNumber(...args),
+    formatNumber: (...args: Parameters<IntlShape['formatNumber']>) => intl.formatNumber(...args),
 
     /** Format a date (delegates to Intl.DateTimeFormat) */
-    formatDate: (...args: Parameters<IntlShape['formatDate']>) =>
-      intl.formatDate(...args),
+    formatDate: (...args: Parameters<IntlShape['formatDate']>) => intl.formatDate(...args),
 
     /** Format relative time ("2 hours ago") */
     formatRelativeTime: (...args: Parameters<IntlShape['formatRelativeTime']>) =>
       intl.formatRelativeTime(...args),
 
     /** Format a list ("A, B, and C") */
-    formatList: (...args: Parameters<IntlShape['formatList']>) =>
-      intl.formatList(...args),
+    formatList: (...args: Parameters<IntlShape['formatList']>) => intl.formatList(...args),
 
     /** The current locale string */
     locale: intl.locale,

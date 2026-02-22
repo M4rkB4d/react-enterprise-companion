@@ -14,7 +14,10 @@ const PII_PATTERNS = [
   { name: 'Phone', pattern: /\+?1?\s*\(?\d{3}\)?[\s.-]?\d{3}[\s.-]?\d{4}/ },
   { name: 'SSN', pattern: /\b\d{3}-?\d{2}-?\d{4}\b/ },
   { name: 'Card Number', pattern: /\b\d{13,19}\b/ },
-  { name: 'Date of Birth', pattern: /\b(19|20)\d{2}[-/](0[1-9]|1[0-2])[-/](0[1-9]|[12]\d|3[01])\b/ },
+  {
+    name: 'Date of Birth',
+    pattern: /\b(19|20)\d{2}[-/](0[1-9]|1[0-2])[-/](0[1-9]|[12]\d|3[01])\b/,
+  },
 ] as const;
 
 /** Keys that are known-safe and should be skipped */

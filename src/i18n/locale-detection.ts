@@ -26,11 +26,7 @@ export type SupportedLocale = (typeof SUPPORTED_LOCALES)[number];
 export const DEFAULT_LOCALE: SupportedLocale = 'en-US';
 
 /** RTL locales for direction detection */
-export const RTL_LOCALES: ReadonlySet<string> = new Set([
-  'ar-SA',
-  'ar-AE',
-  'he-IL',
-]);
+export const RTL_LOCALES: ReadonlySet<string> = new Set(['ar-SA', 'ar-AE', 'he-IL']);
 
 /**
  * Detects the best locale using a three-tier fallback chain:
@@ -41,9 +37,7 @@ export const RTL_LOCALES: ReadonlySet<string> = new Set([
  *
  * Uses @formatjs/intl-localematcher for BCP 47 negotiation.
  */
-export function detectLocale(
-  userPreference: SupportedLocale | null,
-): SupportedLocale {
+export function detectLocale(userPreference: SupportedLocale | null): SupportedLocale {
   // Tier 1: Explicit user preference
   if (userPreference && SUPPORTED_LOCALES.includes(userPreference)) {
     return userPreference;
@@ -55,11 +49,7 @@ export function detectLocale(
       ? [...navigator.languages]
       : [navigator.language];
 
-    const matched = match(
-      browserLocales,
-      [...SUPPORTED_LOCALES],
-      DEFAULT_LOCALE,
-    );
+    const matched = match(browserLocales, [...SUPPORTED_LOCALES], DEFAULT_LOCALE);
 
     return matched as SupportedLocale;
   } catch {

@@ -55,17 +55,12 @@ export const FEATURE_FLAGS: GovernedFeatureFlag[] = [
 export function useGovernedFeatureFlag(flagKey: string) {
   const { logEvent } = useAuditTrail();
 
-  const toggleFlag = async (
-    changeRequestId: string,
-    newState: boolean,
-  ): Promise<void> => {
+  const toggleFlag = async (changeRequestId: string, newState: boolean): Promise<void> => {
     const flag = FEATURE_FLAGS.find((f) => f.key === flagKey);
     if (!flag) throw new Error(`Unknown feature flag: ${flagKey}`);
 
     if (flag.soxControlled && !changeRequestId) {
-      throw new Error(
-        `SOX-controlled flag "${flagKey}" requires a change request ID`,
-      );
+      throw new Error(`SOX-controlled flag "${flagKey}" requires a change request ID`);
     }
 
     const response = await fetch('/api/v1/feature-flags', {

@@ -35,9 +35,24 @@ interface RiskScoreData {
 
 const RISK_STYLES: Record<RiskLevel, { bg: string; text: string; ring: string; label: string }> = {
   low: { bg: 'bg-green-100', text: 'text-green-700', ring: 'ring-green-500', label: 'Low Risk' },
-  medium: { bg: 'bg-yellow-100', text: 'text-yellow-700', ring: 'ring-yellow-500', label: 'Medium Risk' },
-  high: { bg: 'bg-orange-100', text: 'text-orange-700', ring: 'ring-orange-500', label: 'High Risk' },
-  critical: { bg: 'bg-red-100', text: 'text-red-700', ring: 'ring-red-500', label: 'Critical Risk' },
+  medium: {
+    bg: 'bg-yellow-100',
+    text: 'text-yellow-700',
+    ring: 'ring-yellow-500',
+    label: 'Medium Risk',
+  },
+  high: {
+    bg: 'bg-orange-100',
+    text: 'text-orange-700',
+    ring: 'ring-orange-500',
+    label: 'High Risk',
+  },
+  critical: {
+    bg: 'bg-red-100',
+    text: 'text-red-700',
+    ring: 'ring-red-500',
+    label: 'Critical Risk',
+  },
 };
 
 // ─── Sub-components ──────────────────────────────────────
@@ -133,20 +148,14 @@ export function RiskScoreDisplay({ data, onRequestReassessment }: RiskScoreDispl
 
       {/* Assessment Metadata */}
       <div className="mt-4 flex justify-center gap-6 text-xs text-slate-500">
-        <span>
-          Assessed: {new Date(data.lastAssessedAt).toLocaleDateString()}
-        </span>
-        <span>
-          Next review: {new Date(data.nextReviewAt).toLocaleDateString()}
-        </span>
+        <span>Assessed: {new Date(data.lastAssessedAt).toLocaleDateString()}</span>
+        <span>Next review: {new Date(data.nextReviewAt).toLocaleDateString()}</span>
         <span>By: {data.assessedBy}</span>
       </div>
 
       {/* Risk Factors */}
       <div className="mt-6 space-y-4">
-        <h4 className="text-sm font-semibold text-slate-700">
-          Contributing Factors
-        </h4>
+        <h4 className="text-sm font-semibold text-slate-700">Contributing Factors</h4>
         {sortedFactors.map((factor) => (
           <FactorBar key={factor.name} factor={factor} />
         ))}

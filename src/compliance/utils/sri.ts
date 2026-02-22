@@ -29,10 +29,7 @@ export const SRI_HASHES: Record<string, string> = {
  * Generate a script tag with SRI attributes.
  * Used when dynamically loading scripts.
  */
-export function createSRIScript(
-  src: string,
-  integrity: string,
-): HTMLScriptElement {
+export function createSRIScript(src: string, integrity: string): HTMLScriptElement {
   const script = document.createElement('script');
   script.src = src;
   script.integrity = integrity;

@@ -2,11 +2,7 @@
 
 import { create } from 'zustand';
 import { persist, createJSONStorage } from 'zustand/middleware';
-import {
-  type ThemeConfig,
-  defaultTheme,
-  themeConfigSchema,
-} from './schemas';
+import { type ThemeConfig, defaultTheme, themeConfigSchema } from './schemas';
 
 type ColorMode = 'light' | 'dark' | 'system';
 
@@ -43,9 +39,7 @@ type ThemeStore = ThemeState & ThemeActions;
  */
 function resolveColorMode(preference: ColorMode): 'light' | 'dark' {
   if (preference === 'system') {
-    return window.matchMedia('(prefers-color-scheme: dark)').matches
-      ? 'dark'
-      : 'light';
+    return window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light';
   }
   return preference;
 }
@@ -82,9 +76,7 @@ export const useThemeStore = create<ThemeStore>()(
         set({ isLoading: true, error: null });
 
         try {
-          const response = await fetch(
-            `/api/v1/tenants/${tenantId}/theme`,
-          );
+          const response = await fetch(`/api/v1/tenants/${tenantId}/theme`);
 
           if (!response.ok) {
             throw new Error(`Failed to load theme: ${response.status}`);
@@ -94,9 +86,7 @@ export const useThemeStore = create<ThemeStore>()(
           const result = themeConfigSchema.safeParse(config);
 
           if (!result.success) {
-            throw new Error(
-              `Invalid theme from API: ${result.error.message}`,
-            );
+            throw new Error(`Invalid theme from API: ${result.error.message}`);
           }
 
           set({
@@ -106,8 +96,7 @@ export const useThemeStore = create<ThemeStore>()(
             error: null,
           });
         } catch (error) {
-          const message =
-            error instanceof Error ? error.message : 'Theme load failed';
+          const message = error instanceof Error ? error.message : 'Theme load failed';
 
           console.error(`[Theme] Failed to load tenant theme:`, error);
 

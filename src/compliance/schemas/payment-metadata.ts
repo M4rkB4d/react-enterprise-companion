@@ -16,9 +16,7 @@
 import { z } from 'zod';
 
 /** ISO 4217 currency codes commonly used in banking */
-const SUPPORTED_CURRENCIES = [
-  'usd', 'eur', 'gbp', 'jpy', 'cad', 'aud', 'chf',
-] as const;
+const SUPPORTED_CURRENCIES = ['usd', 'eur', 'gbp', 'jpy', 'cad', 'aud', 'chf'] as const;
 
 export const paymentMetadataSchema = z.object({
   /** Amount in smallest currency unit (cents for USD) */
@@ -46,16 +44,10 @@ export const paymentMetadataSchema = z.object({
     .max(50, { error: 'Invalid recipient account ID' }),
 
   /** Optional payment memo / description */
-  memo: z
-    .string()
-    .max(500, { error: 'Memo is too long' })
-    .optional(),
+  memo: z.string().max(500, { error: 'Memo is too long' }).optional(),
 
   /** Optional scheduled date for future payments (ISO-8601) */
-  scheduledDate: z
-    .string()
-    .datetime({ error: 'Invalid date format' })
-    .optional(),
+  scheduledDate: z.string().datetime({ error: 'Invalid date format' }).optional(),
 });
 
 export type PaymentMetadata = z.infer<typeof paymentMetadataSchema>;

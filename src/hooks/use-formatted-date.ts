@@ -71,11 +71,7 @@ export function useFormattedDate() {
 
   /** Format a date using a preset or custom options */
   const formatDate = useCallback(
-    (
-      date: Date | string | number,
-      preset: DatePreset = 'short',
-      timeZone?: string,
-    ): string => {
+    (date: Date | string | number, preset: DatePreset = 'short', timeZone?: string): string => {
       const dateObj = date instanceof Date ? date : new Date(date);
       const options = { ...DATE_PRESETS[preset], timeZone };
       return new Intl.DateTimeFormat(locale, options).format(dateObj);
@@ -85,10 +81,7 @@ export function useFormattedDate() {
 
   /** Format a date as relative time ("2 hours ago", "in 3 days") */
   const formatRelative = useCallback(
-    (
-      date: Date | string | number,
-      style: 'long' | 'short' | 'narrow' = 'long',
-    ): string => {
+    (date: Date | string | number, style: 'long' | 'short' | 'narrow' = 'long'): string => {
       const dateObj = date instanceof Date ? date : new Date(date);
       const now = Date.now();
       const diffMs = dateObj.getTime() - now;
@@ -116,11 +109,7 @@ export function useFormattedDate() {
 
   /** Format a date range ("Jan 15 - 20, 2025") */
   const formatRange = useCallback(
-    (
-      startDate: Date | string,
-      endDate: Date | string,
-      preset: DatePreset = 'short',
-    ): string => {
+    (startDate: Date | string, endDate: Date | string, preset: DatePreset = 'short'): string => {
       const start = startDate instanceof Date ? startDate : new Date(startDate);
       const end = endDate instanceof Date ? endDate : new Date(endDate);
       const options = DATE_PRESETS[preset];

@@ -31,10 +31,10 @@ export function stripPII<T extends Record<string, unknown>>(
  * Pick only the specified fields from a data object.
  * Allowlist approach — only known-safe fields are included.
  */
-export function pickFields<
-  T extends Record<string, unknown>,
-  K extends keyof T,
->(data: T, fields: readonly K[]): Pick<T, K> {
+export function pickFields<T extends Record<string, unknown>, K extends keyof T>(
+  data: T,
+  fields: readonly K[],
+): Pick<T, K> {
   const result = {} as Pick<T, K>;
   for (const field of fields) {
     if (field in data) {

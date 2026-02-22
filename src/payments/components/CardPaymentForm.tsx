@@ -21,12 +21,7 @@
  */
 
 import { useState, useCallback } from 'react';
-import {
-  Elements,
-  CardElement,
-  useStripe,
-  useElements,
-} from '@stripe/react-stripe-js';
+import { Elements, CardElement, useStripe, useElements } from '@stripe/react-stripe-js';
 import { loadStripe } from '@stripe/stripe-js';
 import type { StripeCardElementChangeEvent } from '@stripe/stripe-js';
 import { useAuditTrail } from '@/compliance/hooks/useAuditTrail';
@@ -87,13 +82,10 @@ function PaymentFormInner({
   const [cardComplete, setCardComplete] = useState(false);
   const [cardError, setCardError] = useState<string | null>(null);
 
-  const handleCardChange = useCallback(
-    (event: StripeCardElementChangeEvent) => {
-      setCardComplete(event.complete);
-      setCardError(event.error?.message ?? null);
-    },
-    [],
-  );
+  const handleCardChange = useCallback((event: StripeCardElementChangeEvent) => {
+    setCardComplete(event.complete);
+    setCardError(event.error?.message ?? null);
+  }, []);
 
   const handleSubmit = useCallback(
     async (event: React.FormEvent) => {
@@ -130,10 +122,12 @@ function PaymentFormInner({
         const cardElement = elements.getElement(CardElement);
         if (!cardElement) throw new Error('Card element not found');
 
-        const { error: stripeError, paymentIntent } =
-          await stripe.confirmCardPayment(clientSecret, {
+        const { error: stripeError, paymentIntent } = await stripe.confirmCardPayment(
+          clientSecret,
+          {
             payment_method: { card: cardElement },
-          });
+          },
+        );
 
         if (stripeError) {
           setCardError(stripeError.message ?? 'Payment failed');
@@ -160,23 +154,30 @@ function PaymentFormInner({
           });
         }
       } catch (err) {
-        const message =
-          err instanceof Error ? err.message : 'An unexpected error occurred';
+        const message = err instanceof Error ? err.message : 'An unexpected error occurred';
         onError(message);
       } finally {
         setIsProcessing(false);
       }
     },
-    [stripe, elements, amount, currency, recipientName, recipientAccountId, onSuccess, onError, logEvent],
+    [
+      stripe,
+      elements,
+      amount,
+      currency,
+      recipientName,
+      recipientAccountId,
+      onSuccess,
+      onError,
+      logEvent,
+    ],
   );
 
   return (
     <form onSubmit={handleSubmit} className="space-y-6">
       {/* Payment details */}
       <div className="rounded-lg border border-slate-200 bg-white p-6 shadow-sm">
-        <h3 className="mb-4 text-lg font-semibold text-slate-900">
-          Payment Details
-        </h3>
+        <h3 className="mb-4 text-lg font-semibold text-slate-900">Payment Details</h3>
         <div className="mb-4 grid grid-cols-2 gap-4">
           <div>
             <span className="text-sm text-slate-500">Amount</span>
@@ -189,18 +190,14 @@ function PaymentFormInner({
           </div>
           <div>
             <span className="text-sm text-slate-500">Recipient</span>
-            <p className="text-lg font-medium text-slate-900">
-              {recipientName}
-            </p>
+            <p className="text-lg font-medium text-slate-900">{recipientName}</p>
           </div>
         </div>
       </div>
 
       {/* Card input — STRIPE handles this via iframe */}
       <div className="rounded-lg border border-slate-200 bg-white p-6 shadow-sm">
-        <h3 className="mb-4 text-lg font-semibold text-slate-900">
-          Card Information
-        </h3>
+        <h3 className="mb-4 text-lg font-semibold text-slate-900">Card Information</h3>
         <p className="mb-3 text-xs text-slate-400">
           Card data is collected securely by Stripe. It never touches our servers.
         </p>

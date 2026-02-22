@@ -11,9 +11,7 @@ import type { SupportedLocale } from './locale-detection';
  * 3. Fall back to the default locale (en-US)
  * 4. Use the defaultMessage from the defineMessages call
  */
-export function getFallbackLocales(
-  locale: SupportedLocale,
-): SupportedLocale[] {
+export function getFallbackLocales(locale: SupportedLocale): SupportedLocale[] {
   const fallbacks: Record<string, SupportedLocale[]> = {
     'en-GB': ['en-US'],
     'fr-CA': ['fr-FR', 'en-US'],
@@ -34,10 +32,7 @@ export function mergeWithFallbacks(
 ): Record<string, string> {
   // Start with the most general fallback and layer on specifics
   const merged = {
-    ...fallbackMessages.reduceRight(
-      (acc, fb) => ({ ...acc, ...fb }),
-      {},
-    ),
+    ...fallbackMessages.reduceRight((acc, fb) => ({ ...acc, ...fb }), {}),
   };
 
   // Apply the specific locale messages last (highest priority)

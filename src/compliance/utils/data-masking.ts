@@ -15,7 +15,9 @@ export function maskEmail(email: string): string {
   const [localPart, domain] = email.split('@');
   if (!localPart || !domain) return `${MASK_CHAR}${MASK_CHAR}@${MASK_CHAR}${MASK_CHAR}`;
   const visibleChars = Math.min(2, localPart.length);
-  const masked = localPart.slice(0, visibleChars) + MASK_CHAR.repeat(Math.max(localPart.length - visibleChars, 2));
+  const masked =
+    localPart.slice(0, visibleChars) +
+    MASK_CHAR.repeat(Math.max(localPart.length - visibleChars, 2));
   return `${masked}@${domain}`;
 }
 
@@ -35,7 +37,8 @@ export function maskAccountNumber(accountNumber: string): string {
 
 export function maskSSN(ssn: string): string {
   const digits = ssn.replace(/\D/g, '');
-  if (digits.length < 4) return `${MASK_CHAR}${MASK_CHAR}${MASK_CHAR}-${MASK_CHAR}${MASK_CHAR}-${MASK_CHAR}${MASK_CHAR}${MASK_CHAR}${MASK_CHAR}`;
+  if (digits.length < 4)
+    return `${MASK_CHAR}${MASK_CHAR}${MASK_CHAR}-${MASK_CHAR}${MASK_CHAR}-${MASK_CHAR}${MASK_CHAR}${MASK_CHAR}${MASK_CHAR}`;
   return `${MASK_CHAR}${MASK_CHAR}${MASK_CHAR}-${MASK_CHAR}${MASK_CHAR}-${digits.slice(-4)}`;
 }
 
@@ -49,11 +52,7 @@ export function maskName(name: string): string {
     .join(' ');
 }
 
-export function maskGeneric(
-  value: string,
-  showFirst: number = 2,
-  showLast: number = 4,
-): string {
+export function maskGeneric(value: string, showFirst: number = 2, showLast: number = 4): string {
   if (value.length <= showFirst + showLast) {
     return MASK_CHAR.repeat(value.length);
   }

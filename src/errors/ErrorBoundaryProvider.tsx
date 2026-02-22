@@ -65,10 +65,7 @@ export function ErrorBoundaryProvider({ children }: ErrorBoundaryProviderProps):
     <ErrorBoundaryContext.Provider value={contextValue}>
       <GlobalErrorBoundary>
         {children}
-        <ErrorNotificationContainer
-          notifications={notifications}
-          onDismiss={dismissNotification}
-        />
+        <ErrorNotificationContainer notifications={notifications} onDismiss={dismissNotification} />
       </GlobalErrorBoundary>
     </ErrorBoundaryContext.Provider>
   );
@@ -110,7 +107,10 @@ function ErrorNotificationContainer({
             <p className="font-medium">{notification.title}</p>
             <p className="text-sm text-red-100">{notification.message}</p>
           </div>
-          <button onClick={() => onDismiss(notification.id)} className="text-red-200 hover:text-white">
+          <button
+            onClick={() => onDismiss(notification.id)}
+            className="text-red-200 hover:text-white"
+          >
             <svg className="h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
               <path
                 strokeLinecap="round"

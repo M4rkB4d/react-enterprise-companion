@@ -16,7 +16,12 @@ import { useAuditTrail } from '@/compliance/hooks/useAuditTrail';
 
 // ─── Types ───────────────────────────────────────────────
 
-type DocumentType = 'passport' | 'national_id' | 'drivers_license' | 'utility_bill' | 'bank_statement';
+type DocumentType =
+  | 'passport'
+  | 'national_id'
+  | 'drivers_license'
+  | 'utility_bill'
+  | 'bank_statement';
 
 interface UploadedFile {
   readonly id: string;
@@ -172,8 +177,7 @@ export function DocumentUpload({
         setFile({
           ...fileEntry,
           status: 'error',
-          errorMessage:
-            uploadError instanceof Error ? uploadError.message : 'Upload failed',
+          errorMessage: uploadError instanceof Error ? uploadError.message : 'Upload failed',
         });
 
         logEvent({
@@ -225,22 +229,24 @@ export function DocumentUpload({
       <label className="block text-sm font-medium text-slate-700">
         {label} {required && <span className="text-red-500">*</span>}
       </label>
-      {description && (
-        <p className="text-xs text-slate-500">{description}</p>
-      )}
+      {description && <p className="text-xs text-slate-500">{description}</p>}
 
       {/* Upload Area */}
       {!file || file.status === 'error' ? (
         <div
-          onDragOver={(e) => { e.preventDefault(); setIsDragOver(true); }}
+          onDragOver={(e) => {
+            e.preventDefault();
+            setIsDragOver(true);
+          }}
           onDragLeave={() => setIsDragOver(false)}
           onDrop={handleDrop}
           onClick={() => inputRef.current?.click()}
           className={`cursor-pointer rounded-lg border-2 border-dashed p-8
                       text-center transition-colors
-                      ${isDragOver
-                        ? 'border-blue-400 bg-blue-50'
-                        : 'border-slate-300 bg-slate-50 hover:border-blue-300'
+                      ${
+                        isDragOver
+                          ? 'border-blue-400 bg-blue-50'
+                          : 'border-slate-300 bg-slate-50 hover:border-blue-300'
                       }`}
         >
           <div className="text-slate-400">
@@ -248,7 +254,8 @@ export function DocumentUpload({
               Drop your {DOCUMENT_TYPE_LABELS[documentType]} here
             </p>
             <p className="mt-1 text-xs">
-              or click to browse ({acceptedTypes.map((t) => t.split('/')[1]).join(', ')}, max {maxSizeMB} MB)
+              or click to browse ({acceptedTypes.map((t) => t.split('/')[1]).join(', ')}, max{' '}
+              {maxSizeMB} MB)
             </p>
           </div>
 
@@ -273,9 +280,7 @@ export function DocumentUpload({
             )}
             <div className="flex-1">
               <p className="text-sm font-medium text-slate-700">{file.name}</p>
-              <p className="text-xs text-slate-500">
-                {(file.size / 1024 / 1024).toFixed(2)} MB
-              </p>
+              <p className="text-xs text-slate-500">{(file.size / 1024 / 1024).toFixed(2)} MB</p>
               {file.status === 'uploading' && (
                 <div className="mt-2 h-1.5 w-full overflow-hidden rounded-full bg-slate-200">
                   <div

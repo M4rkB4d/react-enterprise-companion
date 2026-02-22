@@ -51,9 +51,7 @@ export interface PaymentAuditMetadata {
  * This is a defense-in-depth measure — even if someone
  * accidentally passes card data, this function strips it.
  */
-export function sanitizePaymentMetadata(
-  metadata: Record<string, unknown>,
-): PaymentAuditMetadata {
+export function sanitizePaymentMetadata(metadata: Record<string, unknown>): PaymentAuditMetadata {
   const sanitized: PaymentAuditMetadata = {};
 
   if (typeof metadata.amount === 'number') {

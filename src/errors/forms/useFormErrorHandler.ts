@@ -14,8 +14,7 @@ interface UseFormErrorHandlerReturn<T extends FieldValues> {
 export function useFormErrorHandler<T extends FieldValues>(
   formName: string,
 ): UseFormErrorHandlerReturn<T> {
-  const { setFieldErrors, setFormError, clearFieldError, clearAllErrors } =
-    useFormErrorContext();
+  const { setFieldErrors, setFormError, clearFieldError, clearAllErrors } = useFormErrorContext();
   const logger = ErrorLoggingService.getInstance();
 
   const handleSubmitError = useCallback(

@@ -83,9 +83,6 @@ function isValidationError(error: unknown): error is ValidationApiError {
 
 function isBusinessError(error: unknown): error is BusinessApiError {
   return (
-    typeof error === 'object' &&
-    error !== null &&
-    'errorCode' in error &&
-    'userMessage' in error
+    typeof error === 'object' && error !== null && 'errorCode' in error && 'userMessage' in error
   );
 }

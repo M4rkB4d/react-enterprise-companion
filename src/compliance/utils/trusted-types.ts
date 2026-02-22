@@ -24,7 +24,8 @@ export function initTrustedTypes(): void {
   if (
     'trustedTypes' in window &&
     (window as Record<string, unknown>).trustedTypes &&
-    typeof ((window as Record<string, unknown>).trustedTypes as Record<string, unknown>).createPolicy === 'function'
+    typeof ((window as Record<string, unknown>).trustedTypes as Record<string, unknown>)
+      .createPolicy === 'function'
   ) {
     const trustedTypes = (window as Record<string, unknown>).trustedTypes as {
       createPolicy: (name: string, policy: Record<string, unknown>) => void;

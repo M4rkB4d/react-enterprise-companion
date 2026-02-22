@@ -19,9 +19,7 @@ import type { ZodIssue } from 'zod';
  *
  * @see Doc 06 section 3 for Zod schema patterns
  */
-export function createTranslatedErrorMap(
-  intl: IntlShape,
-) {
+export function createTranslatedErrorMap(intl: IntlShape) {
   return (issue: ZodIssue) => {
     // If the issue has a custom message, treat it as a translation key
     const translationKey = issue.message;
@@ -46,9 +44,7 @@ export function createTranslatedErrorMap(
  * Extracts ICU message values from a Zod issue.
  * Maps Zod issue properties to translation variable names.
  */
-function extractErrorValues(
-  issue: ZodIssue,
-): Record<string, string | number> {
+function extractErrorValues(issue: ZodIssue): Record<string, string | number> {
   const values: Record<string, string | number> = {};
 
   // Extract common validation parameters

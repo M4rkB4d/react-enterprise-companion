@@ -20,10 +20,7 @@
  * Generate a SHA-256 hash of an event's content.
  * Uses the Web Crypto API (available in all modern browsers).
  */
-export async function hashEvent(
-  eventData: string,
-  previousHash: string | null,
-): Promise<string> {
+export async function hashEvent(eventData: string, previousHash: string | null): Promise<string> {
   const input = `${previousHash ?? 'GENESIS'}:${eventData}`;
   const encoder = new TextEncoder();
   const data = encoder.encode(input);

@@ -19,11 +19,7 @@ interface AccessibleCurrencyProps {
  * The aria-label uses `currencyDisplay: 'name'` to produce a
  * human-readable string that the screen reader can pronounce correctly.
  */
-export function AccessibleCurrency({
-  amount,
-  currency,
-  className = '',
-}: AccessibleCurrencyProps) {
+export function AccessibleCurrency({ amount, currency, className = '' }: AccessibleCurrencyProps) {
   const intl = useIntl();
   const decimals = getCurrencyDecimals(currency);
 
@@ -53,10 +49,7 @@ export function AccessibleCurrency({
   );
 
   return (
-    <span
-      className={`tabular-nums ${className}`}
-      aria-label={ariaFormat}
-    >
+    <span className={`tabular-nums ${className}`} aria-label={ariaFormat}>
       <span aria-hidden="true">{visualFormat}</span>
     </span>
   );

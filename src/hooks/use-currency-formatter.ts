@@ -42,12 +42,7 @@ export function useCurrencyFormatter(defaultCurrency: string = 'USD') {
       currencyCode: string = defaultCurrency,
       options: CurrencyFormatOptions = {},
     ): string => {
-      const {
-        display = 'symbol',
-        fractionDigits,
-        accounting = false,
-        compact = false,
-      } = options;
+      const { display = 'symbol', fractionDigits, accounting = false, compact = false } = options;
 
       const decimals = fractionDigits ?? getCurrencyDecimals(currencyCode);
 
@@ -69,10 +64,7 @@ export function useCurrencyFormatter(defaultCurrency: string = 'USD') {
    * Useful for custom styling (e.g., smaller decimal digits).
    */
   const formatParts = useCallback(
-    (
-      amount: number,
-      currencyCode: string = defaultCurrency,
-    ): Intl.NumberFormatPart[] => {
+    (amount: number, currencyCode: string = defaultCurrency): Intl.NumberFormatPart[] => {
       const decimals = getCurrencyDecimals(currencyCode);
 
       return new Intl.NumberFormat(locale, {

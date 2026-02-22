@@ -1,10 +1,4 @@
-import {
-  createContext,
-  useContext,
-  useReducer,
-  useCallback,
-  type ReactNode,
-} from 'react';
+import { createContext, useContext, useReducer, useCallback, type ReactNode } from 'react';
 import type { AppError, ErrorState, ErrorAction } from '../types';
 
 const initialState: ErrorState = {

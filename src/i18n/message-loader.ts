@@ -17,9 +17,7 @@ const messageCache = new Map<SupportedLocale, Record<string, string>>();
  *
  * Falls back to DEFAULT_LOCALE if the requested locale file is missing.
  */
-export async function loadMessages(
-  locale: SupportedLocale,
-): Promise<Record<string, string>> {
+export async function loadMessages(locale: SupportedLocale): Promise<Record<string, string>> {
   // Return cached messages if available
   const cached = messageCache.get(locale);
   if (cached) return cached;
@@ -34,8 +32,7 @@ export async function loadMessages(
     return messages;
   } catch (error) {
     console.warn(
-      `[i18n] Failed to load messages for "${locale}". ` +
-        `Falling back to "${DEFAULT_LOCALE}".`,
+      `[i18n] Failed to load messages for "${locale}". ` + `Falling back to "${DEFAULT_LOCALE}".`,
       error,
     );
 

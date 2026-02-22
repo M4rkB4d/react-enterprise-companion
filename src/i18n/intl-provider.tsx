@@ -1,12 +1,6 @@
 // src/i18n/intl-provider.tsx
 
-import {
-  type ReactNode,
-  useEffect,
-  useState,
-  useCallback,
-  useMemo,
-} from 'react';
+import { type ReactNode, useEffect, useState, useCallback, useMemo } from 'react';
 import { IntlProvider } from 'react-intl';
 import { IntlErrorCode, type OnErrorFn } from '@formatjs/intl';
 import { useLocaleStore } from './locale-store';
@@ -96,8 +90,7 @@ export function AppIntlProvider({ children }: AppIntlProviderProps) {
         setMessages(loadedMessages);
         setActiveLocale(targetLocale);
       } catch (error) {
-        const errorMessage =
-          error instanceof Error ? error.message : 'Failed to load locale';
+        const errorMessage = error instanceof Error ? error.message : 'Failed to load locale';
         setError(errorMessage);
         console.error(`[i18n] Failed to load locale "${targetLocale}":`, error);
 

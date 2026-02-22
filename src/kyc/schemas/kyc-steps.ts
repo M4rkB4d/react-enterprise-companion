@@ -51,18 +51,15 @@ export type DocumentUpload = z.infer<typeof documentUploadSchema>;
  * Step 4: Risk Assessment Declaration
  */
 export const riskDeclarationSchema = z.object({
-  employmentStatus: z.enum(
-    ['employed', 'self_employed', 'retired', 'student', 'unemployed'],
-    { error: 'validation.required' },
-  ),
-  sourceOfFunds: z.enum(
-    ['salary', 'business', 'investments', 'inheritance', 'savings', 'other'],
-    { error: 'validation.required' },
-  ),
-  expectedMonthlyVolume: z.enum(
-    ['under_5000', '5000_25000', '25000_100000', 'over_100000'],
-    { error: 'validation.required' },
-  ),
+  employmentStatus: z.enum(['employed', 'self_employed', 'retired', 'student', 'unemployed'], {
+    error: 'validation.required',
+  }),
+  sourceOfFunds: z.enum(['salary', 'business', 'investments', 'inheritance', 'savings', 'other'], {
+    error: 'validation.required',
+  }),
+  expectedMonthlyVolume: z.enum(['under_5000', '5000_25000', '25000_100000', 'over_100000'], {
+    error: 'validation.required',
+  }),
   isPEP: z.boolean(),
   pepDetails: z.string().optional(),
   acceptedTerms: z.literal(true, {

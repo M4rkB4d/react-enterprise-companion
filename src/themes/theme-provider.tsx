@@ -58,17 +58,13 @@ export function ThemeProvider({ children, tenantId }: ThemeProviderProps) {
 /**
  * Applies theme configuration as CSS custom properties on :root.
  */
-function applyThemeToDOM(
-  theme: ThemeConfig,
-  colorMode: 'light' | 'dark',
-): void {
+function applyThemeToDOM(theme: ThemeConfig, colorMode: 'light' | 'dark'): void {
   const root = document.documentElement;
   const isDark = colorMode === 'dark';
 
   // Determine which color set to use
-  const colors = isDark && theme.darkColors
-    ? { ...theme.colors, ...theme.darkColors }
-    : theme.colors;
+  const colors =
+    isDark && theme.darkColors ? { ...theme.colors, ...theme.darkColors } : theme.colors;
 
   // --- Color tokens ---
   root.style.setProperty('--color-primary', colors.primary);

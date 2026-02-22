@@ -6,10 +6,9 @@ import { CURRENCY_CONFIG, getCurrencyDecimals } from '@/i18n/currency-config';
 /**
  * Validates a currency code against supported currencies.
  */
-export const currencyCodeSchema = z.enum(
-  Object.keys(CURRENCY_CONFIG) as [string, ...string[]],
-  { error: 'validation.invalidCurrency' },
-);
+export const currencyCodeSchema = z.enum(Object.keys(CURRENCY_CONFIG) as [string, ...string[]], {
+  error: 'validation.invalidCurrency',
+});
 
 /**
  * A monetary amount paired with its currency.
@@ -65,9 +64,8 @@ export const currencyTransferSchema = z
     sourceAccountId: z.string().uuid({ error: 'validation.required' }),
     targetAccountId: z.string().uuid({ error: 'validation.required' }),
   })
-  .refine(
-    (data) => data.sourceAmount.currency !== data.targetAmount.currency,
-    { message: 'validation.sameCurrency' },
-  );
+  .refine((data) => data.sourceAmount.currency !== data.targetAmount.currency, {
+    message: 'validation.sameCurrency',
+  });
 
 export type CurrencyTransfer = z.infer<typeof currencyTransferSchema>;

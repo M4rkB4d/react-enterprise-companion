@@ -47,10 +47,7 @@ export async function deriveKey(
  * Encrypt data using AES-GCM.
  * Returns the encrypted data with the IV prepended.
  */
-export async function encryptData(
-  key: CryptoKey,
-  plaintext: string,
-): Promise<string> {
+export async function encryptData(key: CryptoKey, plaintext: string): Promise<string> {
   const encoder = new TextEncoder();
   const iv = crypto.getRandomValues(new Uint8Array(12)); // 96-bit IV for GCM
 
@@ -71,22 +68,13 @@ export async function encryptData(
 /**
  * Decrypt data using AES-GCM.
  */
-export async function decryptData(
-  key: CryptoKey,
-  encryptedBase64: string,
-): Promise<string> {
-  const combined = Uint8Array.from(atob(encryptedBase64), (c) =>
-    c.charCodeAt(0),
-  );
+export async function decryptData(key: CryptoKey, encryptedBase64: string): Promise<string> {
+  const combined = Uint8Array.from(atob(encryptedBase64), (c) => c.charCodeAt(0));
 
   const iv = combined.slice(0, 12);
   const ciphertext = combined.slice(12);
 
-  const plaintext = await crypto.subtle.decrypt(
-    { name: 'AES-GCM', iv },
-    key,
-    ciphertext,
-  );
+  const plaintext = await crypto.subtle.decrypt({ name: 'AES-GCM', iv }, key, ciphertext);
 
   return new TextDecoder().decode(plaintext);
 }

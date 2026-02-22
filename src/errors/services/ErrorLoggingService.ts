@@ -103,8 +103,7 @@ export class ErrorLoggingService {
       low: 'color: #6B7280; font-weight: bold;',
       medium: 'color: #F59E0B; font-weight: bold;',
       high: 'color: #EF4444; font-weight: bold;',
-      critical:
-        'color: #DC2626; font-weight: bold; background: #FEE2E2; padding: 2px 6px;',
+      critical: 'color: #DC2626; font-weight: bold; background: #FEE2E2; padding: 2px 6px;',
     };
     return styles[severity] ?? styles.medium;
   }
@@ -162,10 +161,7 @@ export class ErrorLoggingService {
   flushOnUnload(): void {
     window.addEventListener('beforeunload', () => {
       if (this.buffer.length > 0 && this.config.remoteEndpoint) {
-        navigator.sendBeacon(
-          this.config.remoteEndpoint,
-          JSON.stringify({ errors: this.buffer }),
-        );
+        navigator.sendBeacon(this.config.remoteEndpoint, JSON.stringify({ errors: this.buffer }));
       }
     });
   }

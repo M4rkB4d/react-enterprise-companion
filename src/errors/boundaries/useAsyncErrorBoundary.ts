@@ -50,7 +50,7 @@ export function useAsyncErrorBoundary(componentName?: string): UseAsyncErrorBoun
   }, []);
 
   const wrapAsync = useCallback(
-    async <T,>(promise: Promise<T>): Promise<T> => {
+    async <T>(promise: Promise<T>): Promise<T> => {
       try {
         return await promise;
       } catch (error) {

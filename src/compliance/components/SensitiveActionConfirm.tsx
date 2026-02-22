@@ -108,9 +108,7 @@ export function SensitiveActionConfirm({
             aria-label="Confirm action"
             className="mx-4 w-full max-w-md rounded-xl bg-white p-8 shadow-2xl"
           >
-            <h2 className="mb-4 text-xl font-bold text-slate-900">
-              Confirm Action
-            </h2>
+            <h2 className="mb-4 text-xl font-bold text-slate-900">Confirm Action</h2>
             <p className="mb-6 text-slate-600">{actionDescription}</p>
             <div className="flex gap-3">
               <button
@@ -141,15 +139,11 @@ export function SensitiveActionConfirm({
             className="mx-4 w-full max-w-md rounded-xl border-2 border-red-300
                        bg-white p-8 shadow-2xl"
           >
-            <h2 className="mb-4 text-xl font-bold text-red-700">
-              Final Confirmation
-            </h2>
+            <h2 className="mb-4 text-xl font-bold text-red-700">Final Confirmation</h2>
             <p className="mb-2 text-slate-600">
               This action <strong>cannot be undone</strong>.
             </p>
-            <p className="mb-6 font-medium text-slate-900">
-              {actionDescription}
-            </p>
+            <p className="mb-6 font-medium text-slate-900">{actionDescription}</p>
             <div className="flex gap-3">
               <button
                 onClick={handleSecondConfirm}

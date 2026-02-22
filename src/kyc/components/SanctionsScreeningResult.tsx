@@ -41,16 +41,22 @@ const OUTCOME_STYLES: Record<
   { border: string; bg: string; text: string; label: string }
 > = {
   clear: {
-    border: 'border-green-300', bg: 'bg-green-50',
-    text: 'text-green-700', label: 'CLEAR - No Matches',
+    border: 'border-green-300',
+    bg: 'bg-green-50',
+    text: 'text-green-700',
+    label: 'CLEAR - No Matches',
   },
   potential_match: {
-    border: 'border-amber-300', bg: 'bg-amber-50',
-    text: 'text-amber-700', label: 'POTENTIAL MATCH - Review Required',
+    border: 'border-amber-300',
+    bg: 'bg-amber-50',
+    text: 'text-amber-700',
+    label: 'POTENTIAL MATCH - Review Required',
   },
   confirmed_match: {
-    border: 'border-red-400', bg: 'bg-red-50',
-    text: 'text-red-700', label: 'CONFIRMED MATCH - Action Required',
+    border: 'border-red-400',
+    bg: 'bg-red-50',
+    text: 'text-red-700',
+    label: 'CONFIRMED MATCH - Action Required',
   },
 };
 
@@ -65,9 +71,12 @@ const LIST_LABELS: Record<SanctionsList, string> = {
 
 function MatchConfidenceBar({ score }: { readonly score: number }) {
   const color =
-    score >= 90 ? 'bg-red-500'
-      : score >= 70 ? 'bg-orange-500'
-        : score >= 50 ? 'bg-amber-500'
+    score >= 90
+      ? 'bg-red-500'
+      : score >= 70
+        ? 'bg-orange-500'
+        : score >= 50
+          ? 'bg-amber-500'
           : 'bg-blue-500';
 
   return (
@@ -104,9 +113,7 @@ function MatchCard({ match }: { readonly match: SanctionsMatch }) {
           </span>
         </div>
       </div>
-      {match.remarks && (
-        <p className="mt-2 text-xs text-slate-500">{match.remarks}</p>
-      )}
+      {match.remarks && <p className="mt-2 text-xs text-slate-500">{match.remarks}</p>}
     </div>
   );
 }
@@ -146,17 +153,18 @@ export function SanctionsScreeningResult({
       {/* Header */}
       <div className="flex items-start justify-between">
         <div>
-          <span className={`inline-block rounded-full px-3 py-1 text-xs font-bold
-                            ${outcomeStyle.text} ${outcomeStyle.bg} border ${outcomeStyle.border}`}>
+          <span
+            className={`inline-block rounded-full px-3 py-1 text-xs font-bold
+                            ${outcomeStyle.text} ${outcomeStyle.bg} border ${outcomeStyle.border}`}
+          >
             {outcomeStyle.label}
           </span>
           <h3 className="mt-2 text-lg font-bold text-slate-900">
             Sanctions Screening: {data.subjectName}
           </h3>
           <p className="mt-0.5 text-xs text-slate-500">
-            {data.subjectType === 'individual' ? 'Individual' : 'Entity'} |
-            Screened: {new Date(data.screenedAt).toLocaleString()} |
-            Processing: {data.processingTimeMs}ms
+            {data.subjectType === 'individual' ? 'Individual' : 'Entity'} | Screened:{' '}
+            {new Date(data.screenedAt).toLocaleString()} | Processing: {data.processingTimeMs}ms
           </p>
         </div>
         {onRequestRescreen && (
@@ -186,7 +194,8 @@ export function SanctionsScreeningResult({
                   hasMatch ? 'bg-red-100 text-red-700' : 'bg-green-100 text-green-700'
                 }`}
               >
-                {list.replace(/_/g, ' ')}{hasMatch ? ' - MATCH' : ' - Clear'}
+                {list.replace(/_/g, ' ')}
+                {hasMatch ? ' - MATCH' : ' - Clear'}
               </span>
             );
           })}
@@ -243,8 +252,8 @@ export function SanctionsScreeningResult({
 
       {/* Footer */}
       <div className="mt-4 border-t border-slate-200 pt-3 text-xs text-slate-400">
-        Screening ID: {data.screeningId} | Results are point-in-time and must
-        be re-screened periodically per regulatory requirements.
+        Screening ID: {data.screeningId} | Results are point-in-time and must be re-screened
+        periodically per regulatory requirements.
       </div>
     </div>
   );

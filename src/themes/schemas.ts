@@ -5,20 +5,16 @@ import { z } from 'zod';
 /**
  * Validates a hex color string (#RGB or #RRGGBB).
  */
-const hexColor = z
-  .string()
-  .regex(/^#([0-9a-fA-F]{3}|[0-9a-fA-F]{6})$/, {
-    error: 'validation.invalidColor',
-  });
+const hexColor = z.string().regex(/^#([0-9a-fA-F]{3}|[0-9a-fA-F]{6})$/, {
+  error: 'validation.invalidColor',
+});
 
 /**
  * Validates a CSS size value (e.g., '8px', '0.5rem', '1em').
  */
-const cssSize = z
-  .string()
-  .regex(/^\d+(\.\d+)?(px|rem|em)$/, {
-    error: 'validation.invalidSize',
-  });
+const cssSize = z.string().regex(/^\d+(\.\d+)?(px|rem|em)$/, {
+  error: 'validation.invalidSize',
+});
 
 /**
  * Validates a font family string.

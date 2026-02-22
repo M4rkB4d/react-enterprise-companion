@@ -46,9 +46,10 @@ export interface ChangeRecord {
  * Validate that a change record satisfies segregation of duties.
  * SOX requires that no single person fills multiple roles.
  */
-export function validateSegregationOfDuties(
-  record: ChangeRecord,
-): { valid: boolean; violations: string[] } {
+export function validateSegregationOfDuties(record: ChangeRecord): {
+  valid: boolean;
+  violations: string[];
+} {
   const violations: string[] = [];
   const people = {
     developer: record.developer,

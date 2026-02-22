@@ -30,8 +30,7 @@ const CATEGORIES: readonly CategoryInfo[] = [
   {
     key: 'marketing',
     label: 'Marketing',
-    description:
-      'Allow us to show you relevant offers and products based on your banking profile.',
+    description: 'Allow us to show you relevant offers and products based on your banking profile.',
   },
   {
     key: 'personalization',
@@ -48,8 +47,7 @@ const CATEGORIES: readonly CategoryInfo[] = [
 ] as const;
 
 export function ConsentPreferences() {
-  const { preferences, savePreferences, closePreferenceCenter } =
-    useConsentStore();
+  const { preferences, savePreferences, closePreferenceCenter } = useConsentStore();
 
   const [localPrefs, setLocalPrefs] = useState({
     analytics: preferences.analytics,
@@ -74,12 +72,10 @@ export function ConsentPreferences() {
         className="mx-4 max-h-[80vh] w-full max-w-lg overflow-y-auto rounded-xl
                    bg-white p-8 shadow-2xl"
       >
-        <h2 className="mb-2 text-xl font-bold text-slate-900">
-          Cookie Preferences
-        </h2>
+        <h2 className="mb-2 text-xl font-bold text-slate-900">Cookie Preferences</h2>
         <p className="mb-6 text-sm text-slate-500">
-          Choose which cookies you want to allow. Essential cookies cannot be
-          disabled as they are required for core banking functionality.
+          Choose which cookies you want to allow. Essential cookies cannot be disabled as they are
+          required for core banking functionality.
         </p>
 
         {/* Essential — always on */}
@@ -88,8 +84,8 @@ export function ConsentPreferences() {
             <div>
               <h3 className="font-semibold text-slate-900">Essential</h3>
               <p className="mt-1 text-sm text-slate-600">
-                Required for authentication, security, and core banking
-                services. Cannot be disabled.
+                Required for authentication, security, and core banking services. Cannot be
+                disabled.
               </p>
             </div>
             <div
@@ -103,16 +99,11 @@ export function ConsentPreferences() {
 
         {/* Toggleable categories */}
         {CATEGORIES.map((cat) => (
-          <div
-            key={cat.key}
-            className="mb-4 rounded-lg border border-slate-200 p-4"
-          >
+          <div key={cat.key} className="mb-4 rounded-lg border border-slate-200 p-4">
             <div className="flex items-center justify-between">
               <div className="mr-4">
                 <h3 className="font-semibold text-slate-900">{cat.label}</h3>
-                <p className="mt-1 text-sm text-slate-600">
-                  {cat.description}
-                </p>
+                <p className="mt-1 text-sm text-slate-600">{cat.description}</p>
               </div>
               <button
                 type="button"
@@ -121,9 +112,7 @@ export function ConsentPreferences() {
                 aria-label={`${cat.label}: ${localPrefs[cat.key] ? 'enabled' : 'disabled'}`}
                 onClick={() => handleToggle(cat.key)}
                 className={`flex h-6 w-11 shrink-0 items-center rounded-full px-1
-                  transition-colors ${
-                    localPrefs[cat.key] ? 'bg-blue-600' : 'bg-slate-300'
-                  }`}
+                  transition-colors ${localPrefs[cat.key] ? 'bg-blue-600' : 'bg-slate-300'}`}
               >
                 <div
                   className={`h-4 w-4 rounded-full bg-white shadow transition-transform ${

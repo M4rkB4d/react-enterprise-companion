@@ -1,6 +1,11 @@
 import * as Sentry from '@sentry/react';
 import { useEffect } from 'react';
-import { useLocation, useNavigationType, createRoutesFromChildren, matchRoutes } from 'react-router';
+import {
+  useLocation,
+  useNavigationType,
+  createRoutesFromChildren,
+  matchRoutes,
+} from 'react-router';
 import type { ErrorSeverity } from '../types';
 
 interface SentryConfig {

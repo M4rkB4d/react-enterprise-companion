@@ -175,15 +175,13 @@ export function SOXReleaseChecklist({
     <div className="rounded-lg border border-slate-200 bg-white">
       {/* Header */}
       <div className="border-b border-slate-200 p-6">
-        <h2 className="text-xl font-bold text-slate-900">
-          SOX Release Checklist
-        </h2>
+        <h2 className="text-xl font-bold text-slate-900">SOX Release Checklist</h2>
         <p className="mt-1 text-sm text-slate-500">
           Release {releaseVersion} scheduled for {releaseDate}
         </p>
         <p className="mt-2 text-xs text-slate-400">
-          All required items must be verified before production deployment.
-          This checklist is logged for SOX Section 404 compliance evidence.
+          All required items must be verified before production deployment. This checklist is logged
+          for SOX Section 404 compliance evidence.
         </p>
       </div>
 
@@ -213,13 +211,9 @@ export function SOXReleaseChecklist({
                     <div>
                       <span className="text-sm font-medium text-slate-700">
                         {item.label}
-                        {item.required && (
-                          <span className="ml-1 text-red-500">*</span>
-                        )}
+                        {item.required && <span className="ml-1 text-red-500">*</span>}
                       </span>
-                      <p className="mt-0.5 text-xs text-slate-400">
-                        {item.description}
-                      </p>
+                      <p className="mt-0.5 text-xs text-slate-400">{item.description}</p>
                     </div>
                   </label>
                 ))}
@@ -233,9 +227,7 @@ export function SOXReleaseChecklist({
         <p className="text-xs text-slate-400">
           {checkedIds.size}/{items.length} items verified
           {!allRequiredChecked && (
-            <span className="ml-2 text-amber-600">
-              (some required items are unchecked)
-            </span>
+            <span className="ml-2 text-amber-600">(some required items are unchecked)</span>
           )}
         </p>
         <button

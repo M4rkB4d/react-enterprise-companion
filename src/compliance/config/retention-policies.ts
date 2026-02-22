@@ -78,21 +78,21 @@ export const CLIENT_RETENTION_POLICIES: readonly RetentionPolicy[] = [
 export const QUERY_CACHE_CONFIG = {
   /** Time data is considered fresh (no refetch) */
   staleTime: {
-    accounts: 30 * 1000,      // 30 seconds
-    transactions: 60 * 1000,   // 1 minute
-    payments: 30 * 1000,       // 30 seconds
-    audit: 5 * 60 * 1000,     // 5 minutes
-    compliance: 60 * 1000,     // 1 minute
-    theme: 10 * 60 * 1000,    // 10 minutes
+    accounts: 30 * 1000, // 30 seconds
+    transactions: 60 * 1000, // 1 minute
+    payments: 30 * 1000, // 30 seconds
+    audit: 5 * 60 * 1000, // 5 minutes
+    compliance: 60 * 1000, // 1 minute
+    theme: 10 * 60 * 1000, // 10 minutes
   },
   /** Time unused data stays in cache before garbage collection */
   gcTime: {
-    accounts: 5 * 60 * 1000,   // 5 minutes
+    accounts: 5 * 60 * 1000, // 5 minutes
     transactions: 10 * 60 * 1000, // 10 minutes
-    payments: 5 * 60 * 1000,   // 5 minutes
-    audit: 15 * 60 * 1000,     // 15 minutes
+    payments: 5 * 60 * 1000, // 5 minutes
+    audit: 15 * 60 * 1000, // 15 minutes
     compliance: 10 * 60 * 1000, // 10 minutes
-    theme: 30 * 60 * 1000,     // 30 minutes
+    theme: 30 * 60 * 1000, // 30 minutes
   },
 } as const;
 
@@ -108,8 +108,7 @@ export function findExpiredEntries(): Array<{
   const expired: Array<{ key: string; storageType: string; policy: RetentionPolicy }> = [];
 
   for (const policy of CLIENT_RETENTION_POLICIES) {
-    const storage =
-      policy.storageType === 'localStorage' ? localStorage : sessionStorage;
+    const storage = policy.storageType === 'localStorage' ? localStorage : sessionStorage;
 
     for (let i = 0; i < storage.length; i++) {
       const key = storage.key(i);
@@ -141,8 +140,7 @@ export function purgeExpiredEntries(): number {
   const expired = findExpiredEntries();
 
   for (const entry of expired) {
-    const storage =
-      entry.storageType === 'localStorage' ? localStorage : sessionStorage;
+    const storage = entry.storageType === 'localStorage' ? localStorage : sessionStorage;
     storage.removeItem(entry.key);
   }
 

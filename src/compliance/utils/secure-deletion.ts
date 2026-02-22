@@ -84,27 +84,29 @@ export function eraseFromAllStorage(key: string): void {
   // Also try to remove from IndexedDB
   const databases = indexedDB.databases?.();
   if (databases) {
-    databases.then((dbs) => {
-      for (const db of dbs) {
-        if (db.name) {
-          const request = indexedDB.open(db.name);
-          request.onsuccess = () => {
-            const transaction = request.result;
-            const storeNames = Array.from(transaction.objectStoreNames);
-            for (const storeName of storeNames) {
-              try {
-                const tx = transaction.transaction(storeName, 'readwrite');
-                tx.objectStore(storeName).delete(key);
-              } catch {
-                // Store may not contain this key
+    databases
+      .then((dbs) => {
+        for (const db of dbs) {
+          if (db.name) {
+            const request = indexedDB.open(db.name);
+            request.onsuccess = () => {
+              const transaction = request.result;
+              const storeNames = Array.from(transaction.objectStoreNames);
+              for (const storeName of storeNames) {
+                try {
+                  const tx = transaction.transaction(storeName, 'readwrite');
+                  tx.objectStore(storeName).delete(key);
+                } catch {
+                  // Store may not contain this key
+                }
               }
-            }
-            transaction.close();
-          };
+              transaction.close();
+            };
+          }
         }
-      }
-    }).catch(() => {
-      // indexedDB.databases() not supported in all browsers
-    });
+      })
+      .catch(() => {
+        // indexedDB.databases() not supported in all browsers
+      });
   }
 }

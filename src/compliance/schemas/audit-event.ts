@@ -24,8 +24,11 @@ const baseAuditEventSchema = z.object({
 
 const authEventSchema = baseAuditEventSchema.extend({
   action: z.enum([
-    'auth.login', 'auth.logout', 'auth.mfa_verified',
-    'auth.session_expired', 'auth.password_changed',
+    'auth.login',
+    'auth.logout',
+    'auth.mfa_verified',
+    'auth.session_expired',
+    'auth.password_changed',
   ]),
   resource: z.string().startsWith('session:'),
   metadata: z.object({
@@ -37,8 +40,11 @@ const authEventSchema = baseAuditEventSchema.extend({
 
 const paymentEventSchema = baseAuditEventSchema.extend({
   action: z.enum([
-    'payment.initiated', 'payment.succeeded', 'payment.failed',
-    'payment.cancelled', 'payment.refund_requested',
+    'payment.initiated',
+    'payment.succeeded',
+    'payment.failed',
+    'payment.cancelled',
+    'payment.refund_requested',
   ]),
   resource: z.string().startsWith('payment:'),
   metadata: z.object({
@@ -50,9 +56,7 @@ const paymentEventSchema = baseAuditEventSchema.extend({
 });
 
 const accountEventSchema = baseAuditEventSchema.extend({
-  action: z.enum([
-    'account.viewed', 'account.statement_downloaded', 'account.settings_changed',
-  ]),
+  action: z.enum(['account.viewed', 'account.statement_downloaded', 'account.settings_changed']),
   resource: z.string().startsWith('account:'),
   metadata: z.object({
     accountType: z.string().optional(),
@@ -62,8 +66,10 @@ const accountEventSchema = baseAuditEventSchema.extend({
 
 const transferEventSchema = baseAuditEventSchema.extend({
   action: z.enum([
-    'transfer.initiated', 'transfer.approved',
-    'transfer.completed', 'transfer.rejected',
+    'transfer.initiated',
+    'transfer.approved',
+    'transfer.completed',
+    'transfer.rejected',
   ]),
   resource: z.string().startsWith('transfer:'),
   metadata: z.object({

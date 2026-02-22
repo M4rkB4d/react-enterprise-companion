@@ -18,13 +18,8 @@ import { useConsentStore } from '@/compliance/hooks/useConsentStore';
 import { ConsentPreferences } from './ConsentPreferences';
 
 export function CookieConsent() {
-  const {
-    hasConsented,
-    isPreferenceCenterOpen,
-    acceptAll,
-    rejectAll,
-    openPreferenceCenter,
-  } = useConsentStore();
+  const { hasConsented, isPreferenceCenterOpen, acceptAll, rejectAll, openPreferenceCenter } =
+    useConsentStore();
 
   // Don't render if user has already made a choice
   if (hasConsented) return null;
@@ -43,14 +38,11 @@ export function CookieConsent() {
                    bg-white px-6 py-8 shadow-2xl sm:px-12"
       >
         <div className="mx-auto max-w-4xl">
-          <h2 className="mb-3 text-xl font-semibold text-slate-900">
-            Your Privacy Matters
-          </h2>
+          <h2 className="mb-3 text-xl font-semibold text-slate-900">Your Privacy Matters</h2>
           <p className="mb-6 text-base leading-relaxed text-slate-600">
-            We use essential cookies to provide core banking services. We also
-            use optional cookies for analytics, personalization, and marketing.
-            You can customize your preferences or reject all non-essential
-            cookies.{' '}
+            We use essential cookies to provide core banking services. We also use optional cookies
+            for analytics, personalization, and marketing. You can customize your preferences or
+            reject all non-essential cookies.{' '}
             <a
               href="/privacy-policy"
               className="font-medium text-blue-600 underline hover:text-blue-800"

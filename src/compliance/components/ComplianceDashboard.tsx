@@ -82,9 +82,7 @@ export function ComplianceDashboard() {
     <div className="space-y-8">
       {/* Overall Score */}
       <div className="rounded-xl border border-slate-200 bg-white p-8 shadow-sm">
-        <h2 className="mb-4 text-2xl font-bold text-slate-900">
-          Compliance Overview
-        </h2>
+        <h2 className="mb-4 text-2xl font-bold text-slate-900">Compliance Overview</h2>
         <div className="flex items-center gap-8">
           <div
             className={`flex h-24 w-24 items-center justify-center rounded-full text-3xl font-bold ${
@@ -98,15 +96,10 @@ export function ComplianceDashboard() {
             {data.overallScore}%
           </div>
           <div>
-            <p className="text-lg font-medium text-slate-900">
-              Overall Compliance Score
-            </p>
+            <p className="text-lg font-medium text-slate-900">Overall Compliance Score</p>
             <p className="text-sm text-slate-500">
               Based on{' '}
-              {Object.values(data.byRegulation).reduce(
-                (sum, r) => sum + r.controlsTotal,
-                0,
-              )}{' '}
+              {Object.values(data.byRegulation).reduce((sum, r) => sum + r.controlsTotal, 0)}{' '}
               controls across {Object.keys(data.byRegulation).length} regulations
             </p>
           </div>
@@ -121,16 +114,9 @@ export function ComplianceDashboard() {
             (typeof data.byRegulation)[Regulation],
           ][]
         ).map(([regulation, info]) => (
-          <div
-            key={regulation}
-            className={`rounded-lg border-2 p-6 ${STATUS_STYLES[info.status]}`}
-          >
-            <h3 className="text-lg font-bold">
-              {REGULATION_LABELS[regulation]}
-            </h3>
-            <p className="mt-1 text-sm capitalize">
-              {info.status.replace('_', ' ')}
-            </p>
+          <div key={regulation} className={`rounded-lg border-2 p-6 ${STATUS_STYLES[info.status]}`}>
+            <h3 className="text-lg font-bold">{REGULATION_LABELS[regulation]}</h3>
+            <p className="mt-1 text-sm capitalize">{info.status.replace('_', ' ')}</p>
             <div className="mt-4">
               <div className="flex justify-between text-sm">
                 <span>Controls Passing</span>
