@@ -14,6 +14,10 @@ const PaymentsPage = lazy(() =>
 );
 const PaymentWizard = lazy(() => import('@/features/payments/components/PaymentWizard'));
 const PaymentHistory = lazy(() => import('@/features/payments/components/PaymentHistory'));
+const AccountsPage = lazy(() => import('@/pages/AccountsPage'));
+const AccountDetailPage = lazy(() => import('@/pages/AccountDetailPage'));
+const TransfersPage = lazy(() => import('@/pages/TransfersPage'));
+const AuditPage = lazy(() => import('@/pages/AuditPage'));
 
 function LazyWrapper({ children }: { children: React.ReactNode }) {
   return (
@@ -78,6 +82,38 @@ export function AppRoutes() {
               }
             />
           </Route>
+          <Route
+            path="accounts"
+            element={
+              <LazyWrapper>
+                <AccountsPage />
+              </LazyWrapper>
+            }
+          />
+          <Route
+            path="accounts/:id"
+            element={
+              <LazyWrapper>
+                <AccountDetailPage />
+              </LazyWrapper>
+            }
+          />
+          <Route
+            path="transfers"
+            element={
+              <LazyWrapper>
+                <TransfersPage />
+              </LazyWrapper>
+            }
+          />
+          <Route
+            path="audit"
+            element={
+              <LazyWrapper>
+                <AuditPage />
+              </LazyWrapper>
+            }
+          />
         </Route>
       </Route>
     </Routes>

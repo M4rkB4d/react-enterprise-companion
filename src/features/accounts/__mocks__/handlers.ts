@@ -115,7 +115,7 @@ function generateTransactions(accountId: string, count: number): Transaction[] {
     date.setMinutes(Math.floor(Math.random() * 60));
 
     txns.push({
-      id: `t${accountId.slice(-3)}-${String(i).padStart(4, '0')}-4000-8000-${String(i).padStart(12, '0')}`,
+      id: `${accountId.slice(0, 8)}-${String(i).padStart(4, '0')}-4000-8000-${String(i).padStart(12, '0')}`,
       accountId,
       type: isCredit ? 'credit' : 'debit',
       category,

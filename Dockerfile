@@ -8,8 +8,8 @@ RUN apk add --no-cache libc6-compat
 # Copy package files
 COPY package.json package-lock.json ./
 
-# Install dependencies
-RUN npm ci
+# Install dependencies (--legacy-peer-deps for React 19 peer dep conflicts)
+RUN npm ci --legacy-peer-deps
 
 # Stage 2: Builder
 FROM node:22-alpine AS builder
@@ -36,8 +36,8 @@ RUN npm run build
 FROM nginx:alpine AS production
 WORKDIR /usr/share/nginx/html
 
-# Install envsubst for runtime env substitution
-RUN apk add --no-cache gettext
+# Install envsubst for runtime env substitution, curl for healthcheck
+RUN apk add --no-cache gettext curl
 
 # Copy custom nginx configuration
 COPY nginx/nginx.conf /etc/nginx/nginx.conf
@@ -51,6 +51,7 @@ RUN adduser -D -g '' appuser && \
     chown -R appuser:appuser /usr/share/nginx/html && \
     chown -R appuser:appuser /var/cache/nginx && \
     chown -R appuser:appuser /var/log/nginx && \
+    chown -R appuser:appuser /etc/nginx/conf.d && \
     touch /var/run/nginx.pid && \
     chown -R appuser:appuser /var/run/nginx.pid
 
