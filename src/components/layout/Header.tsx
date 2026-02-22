@@ -45,7 +45,7 @@ export function Header() {
               <button
                 onClick={() => logoutMutation.mutate()}
                 className="flex items-center gap-1 rounded-md px-2 py-1 text-sm text-gray-500 transition-colors hover:bg-gray-100 hover:text-gray-700 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-gray-200"
-                title="Logout"
+                aria-label="Logout"
               >
                 <LogOut className="h-4 w-4" />
               </button>
